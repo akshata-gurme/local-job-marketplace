@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkLocal - Home</title>
+    <style>
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            
+            /* BACKGROUND IMAGE SETTINGS */
+            background-image: linear-gradient(rgba(30, 58, 138, 0.7), rgba(79, 70, 229, 0.7)), 
+                              url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1500&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            overflow: hidden;
+        }
+
+        /* The Card - Made slightly transparent to look modern */
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px); /* Blurs the background behind the card */
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        /* Rest of the styles from previous version */
+        .header h1 { color: #1e3a8a; font-size: 28px; margin: 0; }
+        .header p { color: #64748b; margin: 5px 0 25px; }
+        
+        .selection-container { display: flex; gap: 15px; margin-bottom: 25px; }
+        
+        .role-card {
+            flex: 1;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: white;
+        }
+
+        .role-card.active {
+            border-color: #4f46e5;
+            background-color: #f5f3ff;
+            transform: scale(1.05);
+        }
+
+        .icon { font-size: 40px; margin-bottom: 10px; }
+        .role-title { font-weight: bold; display: block; }
+        .role-desc { font-size: 12px; color: #64748b; }
+
+        .btn-continue {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            background: #4f46e5;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .footer-links a { color: #4f46e5; text-decoration: none; font-weight: bold; }
+        .admin-link { display: block; margin-top: 10px; font-size: 12px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">Back</button>
+
+    <div class="main-card">
+        <div class="header">
+            <h1>WorkLocal</h1>
+            <p>Jobs for Latur,Chakur, Udgir & Nilanga</p>
+        </div>
+
+        <h2 style="font-size: 18px; color: #334155;">Choose your profile</h2>
+
+        <div class="selection-container">
+            <div class="role-card" onclick="selectRole(this)">
+                <div class="icon">👷</div>
+                <span class="role-title">Worker</span>
+                <span class="role-desc">Labor, Cleaning, etc.</span>
+            </div>
+            <div class="role-card" onclick="selectRole(this)">
+                <div class="icon">🏠</div>
+                <span class="role-title">Employer</span>
+                <span class="role-desc">Hire local help</span>
+            </div>
+        </div>
+
+        <button class="btn-continue" id="continueBtn">Get Started</button>
+
+        <div class="footer-links">
+            Already registered? <a href="index.html">Login</a>
+            <a href="worker.html" class="admin-link">Create worker account</a>
+        </div>
+    </div>
+
+    <script>
+        let selectedRole = '';
+
+        function selectRole(el) {
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            selectedRole = el.textContent.includes('Employer') ? 'employer' : 'worker';
+        }
+
+        document.getElementById('continueBtn').addEventListener('click', () => {
+            if (!selectedRole) {
+                alert('Please choose Worker or Employer first.');
+                return;
+            }
+
+            window.location.href = selectedRole === 'worker' ? 'worker.html' : 'employer.html';
+        });
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

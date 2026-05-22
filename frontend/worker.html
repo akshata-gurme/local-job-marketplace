@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Worker Registration</title>
+    <style>
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+/* 1. NO SCROLL ZONE: Lock the screen */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Disables page-level scrolling */
+            background-color: #1a3a7a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* 2. MAIN CONTAINER */
+        .main-container {
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            width: 95vw;
+            max-width: 1100px;
+            height: 90vh; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* 3. LEFT PANEL: Selection Grid */
+        .left-panel {
+            flex: 1.4;
+            padding: 25px;
+            background-color: #f8faff;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #eee;
+        }
+
+        .left-panel h1 {
+            color: #1a3a7a;
+            font-size: 26px;
+            margin: 0 0 5px 0;
+        }
+
+        .left-panel p {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 20px 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .skill-card {
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid #edf2f7;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .skill-card:hover { border-color: #1a3a7a; transform: translateY(-2px); }
+        .skill-card.active { border-color: #1a3a7a; background-color: #ebf4ff; }
+
+        .skill-card img {
+            width: 100%;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: #e2e8f0;
+        }
+
+        .skill-card p {
+            margin: 0;
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a3a7a;
+            text-transform: uppercase;
+        }
+
+        /* 4. RIGHT PANEL: Form */
+        .right-panel {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background: white;
+            overflow-y: auto;
+        }
+
+        .right-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .right-panel::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .right-panel::-webkit-scrollbar-thumb {
+            background: #1a3a7a;
+            border-radius: 10px;
+        }
+
+        .right-panel h2 {
+            font-size: 28px;
+            margin: 0 0 20px 0;
+            color: #2d3748;
+        }
+
+        .form-group { margin-bottom: 12px; }
+        .form-row { display: flex; gap: 10px; margin-bottom: 12px; }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            background: #fdfdfd;
+        }
+
+        .form-control:focus { border-color: #1a3a7a; background: white; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #1a3a7a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover { background-color: #0d2350; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        .skills-grid::-webkit-scrollbar { width: 5px; }
+        .skills-grid::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+
+        .status-box {
+            min-height: 24px;
+            margin-top: 14px;
+            color: #1a3a7a;
+            font-size: 14px;
+        }
+
+        .jobs-nav-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #1a3a7a;
+            color: #1a3a7a;
+            background: #ffffff;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        @media (max-width: 850px) {
+            html, body { overflow: auto; height: auto; }
+            .main-container { flex-direction: column; height: auto; width: 95%; margin: 20px 0; }
+            .left-panel { border-right: none; border-bottom: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">Back</button>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <h1>Worker Profile</h1>
+            <p>Select your primary skill or service category.</p>
+            
+            <div class="skills-grid" id="skillsGrid">
+                <div class="skill-card" data-skill="Agri Labor">
+                    <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?w=200&fit=crop" alt="Agri"><p>Agri Labor</p>
+                </div>
+                <div class="skill-card" data-skill="Security">
+                    <img src="https://images.pexels.com/photos/6069352/pexels-photo-6069352.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Security"><p>Security</p>
+                </div>
+                <div class="skill-card" data-skill="Housekeeping">
+                    <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=200&fit=crop" alt="House"><p>Housekeeping</p>
+                </div>
+                <div class="skill-card" data-skill="Labourer">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=200&fit=crop" alt="Labourer"><p>Labourer</p>
+                </div>
+                <div class="skill-card" data-skill="Cleaner/Maid">
+                    <img src="https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?auto=compress&cs=tinysrgb&w=200" ><p>Cleaner/Maid</p>
+                </div>
+                <div class="skill-card" data-skill="Peon/Helper">
+                    <img src="https://images.pexels.com/photos/4342493/pexels-photo-4342493.jpeg?auto=compress&cs=tinysrgb&w=200"><p>Peon/Helper</p>
+                </div>
+                <div class="skill-card" data-skill="Electrician">
+                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=200&fit=crop" alt="Elec"><p>Electrician</p>
+                </div>
+                <div class="skill-card" data-skill="Carpenter">
+                    <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=200&fit=crop" alt="Carpenter"><p>Carpenter</p>
+                </div>
+                <div class="skill-card" data-skill="Plumber">
+                    <img src="https://images.pexels.com/photos/2310904/pexels-photo-2310904.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Plumber"><p>Plumber</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h2>Worker Profile</h2>
+            <form id="profileForm">
+                
+                <div class="form-group">
+                    <input type="text" name="full_name" placeholder="Full Name" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email Address" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <select id="skillDropdown" name="skill" class="form-control" required>
+                        <option value="" disabled selected>Select Primary Skill</option>
+                        <option value="Agri Labor">Agri Labor</option>
+                        <option value="Security">Security</option>
+                        <option value="Housekeeping">Housekeeping</option>
+                        <option value="Labourer">Labourer</option>
+                        <option value="Cleaner/Maid">Cleaner/Maid</option>
+                        <option value="Peon/Helper">Peon/Helper</option>
+                        <option value="Electrician">Electrician</option>
+                        <option value="Carpenter">Carpenter</option>
+                        <option value="Plumber">Plumber</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <input type="number" name="daily_wage" placeholder="Daily Wage (Rs)" class="form-control" required>
+                    <input type="number" name="experience" placeholder="Experience (Yrs)" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <select name="location" class="form-control" required>
+                        <option value="" disabled selected>Select Location</option>
+                        <option value="Latur">Latur</option>
+                        <option value="Chakur">Chakur</option>
+                        <option value="Udgir">Udgir</option>
+                        <option value="Nilanga">Nilanga</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="tel" name="whatsapp_no" placeholder="WhatsApp / Mobile Number" class="form-control" minlength="10" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" title="Enter exactly 10 digits" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Create Profile</button>
+            </form>
+            <button type="button" class="jobs-nav-btn" onclick="window.location.href='jobs.html'" style="width: 100%; margin-top: 10px;">WorkLocal Jobs Panel</button>
+            <div class="status-box" id="statusBox"></div>
+        </div>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.skill-card');
+        const dropdown = document.getElementById('skillDropdown');
+        const profileForm = document.getElementById('profileForm');
+        const statusBox = document.getElementById('statusBox');
+
+        // Logic: Click image card -> updates dropdown select
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const skill = card.getAttribute('data-skill');
+                dropdown.value = skill;
+                
+                // Toggle visual active state
+                cards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+
+        // Logic: Change dropdown manually -> highlights the card
+        dropdown.addEventListener('change', () => {
+            cards.forEach(c => {
+                c.classList.remove('active');
+                if(c.getAttribute('data-skill') === dropdown.value) {
+                    c.classList.add('active');
+                }
+            });
+        });
+
+        profileForm.addEventListener('submit', async event => {
+            event.preventDefault();
+
+            const formData = new FormData(profileForm);
+            const payload = Object.fromEntries(formData.entries());
+            payload.daily_wage = Number(payload.daily_wage);
+            payload.experience = Number(payload.experience);
+
+            statusBox.textContent = 'Creating worker profile...';
+
+            const response = await fetch('/api/workers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                statusBox.textContent = result.detail || 'Could not create worker profile.';
+                return;
+            }
+
+            profileForm.reset();
+            cards.forEach(card => card.classList.remove('active'));
+            statusBox.textContent = result.message + ' You can now log in.';
+        });
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

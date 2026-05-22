@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkLocal Latur - Employer Profile</title>
+    <style>
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.85);
+            color: #ffffff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1a3a7a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 25px;
+            display: flex;
+            width: 1000px;
+            max-width: 100%;
+            height: 90vh;
+            min-height: 650px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        /* Left Panel */
+        .left-panel {
+            flex: 1.2;
+            padding: 30px;
+            background-color: #f8faff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid #eee;
+        }
+
+        .left-panel h1 {
+            color: #1a3a7a;
+            font-size: 28px;
+            margin: 0 0 5px 0;
+        }
+
+        .left-panel p {
+            color: #666;
+            font-size: 14px;
+            margin: 0 0 25px 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .skill-card {
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            border: 2px solid #eee;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+            border-color: #1a3a7a;
+        }
+
+        .skill-card.active {
+            border-color: #1a3a7a;
+            background-color: #eef2ff;
+        }
+
+        /* Image Styling with Fallback */
+        .skill-card img {
+            width: 100%;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #1a3a7a, #3a5db0); /* Professional blue fallback */
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .skill-card p {
+            margin: 0;
+            font-size: 11px;
+            font-weight: bold;
+            color: #1a3a7a;
+            text-transform: uppercase;
+        }
+
+        /* Right Panel */
+        .right-panel {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow-y: auto;
+        }
+
+        .right-panel h2 {
+            font-size: 32px;
+            margin: 0 0 25px 0;
+            color: #333;
+        }
+
+        .section-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 16px;
+            background: #ffffff;
+        }
+
+        .section-card h3 {
+            margin: 0 0 12px 0;
+            color: #1a3a7a;
+            font-size: 20px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-control:focus { border-color: #1a3a7a; }
+
+        .create-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: #1a3a7a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .create-btn:hover { background-color: #122a5a; }
+
+        .status-box {
+            min-height: 24px;
+            margin-top: 14px;
+            color: #1a3a7a;
+            font-size: 14px;
+        }
+
+        .jobs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .nav-jobs {
+            border: 1px solid #1a3a7a;
+            color: #1a3a7a;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+
+        .mini-btn {
+            border: 1px solid #1a3a7a;
+            background: #ffffff;
+            color: #1a3a7a;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .jobs-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .job-card {
+            border: 1px solid #dbe3f1;
+            border-radius: 10px;
+            padding: 12px;
+            background: #f8faff;
+        }
+
+        .job-card h4 {
+            margin: 0 0 6px 0;
+            color: #1a3a7a;
+            font-size: 17px;
+        }
+
+        .job-meta {
+            margin: 0 0 4px 0;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .main-container { flex-direction: column; height: auto; }
+            .left-panel { border-right: none; border-bottom: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()">Back</button>
+
+    <div class="main-container">
+        <div class="left-panel">
+            <h1>WorkLocal Latur</h1>
+            <p>Direct hiring for Latur, Chakur, Nilanga & Udgir.</p>
+            
+            <div class="skills-grid">
+                <div class="skill-card" data-skill="Agri Labor">
+                    <img src="https://images.pexels.com/photos/2132250/pexels-photo-2132250.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Agri">
+                    <p>Agri Labor</p>
+                </div>
+                <div class="skill-card" data-skill="Security">
+                    <img src="https://images.pexels.com/photos/6069352/pexels-photo-6069352.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Security">
+                    <p>Security</p>
+                </div>
+                <div class="skill-card" data-skill="Housekeeping">
+                    <img src="https://images.pexels.com/photos/4099467/pexels-photo-4099467.jpeg?auto=compress&cs=tinysrgb&w=200" alt="House">
+                    <p>Housekeeping</p>
+                </div>
+                <div class="skill-card" data-skill="Labourer">
+                    <img src="https://images.pexels.com/photos/585419/pexels-photo-585419.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Work">
+                    <p>Labourer</p>
+                </div>
+                <div class="skill-card" data-skill="Cleaner/Maid">
+                    <img src="https://images.pexels.com/photos/4108715/pexels-photo-4108715.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Clean">
+                    <p>Cleaner/Maid</p>
+                </div>
+                <div class="skill-card" data-skill="Peon/Helper">
+                    <img src="https://images.pexels.com/photos/4342493/pexels-photo-4342493.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Helper">
+                    <p>Peon/Helper</p>
+                </div>
+                <div class="skill-card" data-skill="Electrician">
+                    <img src="https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Elec">
+                    <p>Electrician</p>
+                </div>
+                <div class="skill-card" data-skill="Carpenter">
+                    <img src="https://images.pexels.com/photos/313691/pexels-photo-313691.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Carp">
+                    <p>Carpenter</p>
+                </div>
+                <div class="skill-card" data-skill="Plumber">
+                    <img src="https://images.pexels.com/photos/2310904/pexels-photo-2310904.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Plumb">
+                    <p>Plumber</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <h2>Employer Dashboard</h2>
+            <button class="nav-jobs" type="button" onclick="window.location.href='jobs.html'">WorkLocal Jobs Panel</button>
+
+            <div class="section-card">
+                <h3>Create Employer Profile</h3>
+                <form id="employerForm">
+                    <div class="form-group">
+                        <input type="text" name="full_name" placeholder="Full Name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="Email Address" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" placeholder="Password" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <select id="loc" name="location" class="form-control" required style="flex: 1;">
+                            <option value="" disabled selected>Location</option>
+                            <option>Latur</option><option>Chakur</option>
+                            <option>Udgir</option><option>Nilanga</option>
+                        </select>
+                        <input type="tel" name="whatsapp_no" placeholder="WhatsApp No." class="form-control" style="flex: 1.5;" minlength="10" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" title="Enter exactly 10 digits" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)" required>
+                    </div>
+                    <div class="form-group">
+                        <select id="skillDropdown" name="skill_needed" class="form-control" required>
+                            <option value="" disabled selected>Skill Needed</option>
+                            <option>Agri Labor</option><option>Security</option>
+                            <option>Housekeeping</option><option>Labourer</option>
+                            <option>Cleaner/Maid</option><option>Peon/Helper</option>
+                            <option>Electrician</option><option>Carpenter</option>
+                            <option>Plumber</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="create-btn">Create Account</button>
+                </form>
+                <div class="status-box" id="statusBox"></div>
+            </div>
+
+            <div class="section-card">
+                <h3>Post a Job</h3>
+                <form id="jobForm">
+                    <div class="form-group">
+                        <input type="text" id="jobEmployerName" name="employer_name" placeholder="Employer Name" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" id="jobEmployerEmail" name="employer_email" placeholder="Employer Email" class="form-control" required style="flex: 1.3;">
+                        <input type="tel" id="jobEmployerPhone" name="employer_phone" placeholder="Employer Phone" class="form-control" minlength="10" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)" required style="flex: 1;">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="job_title" placeholder="Job Title (e.g. Electrician for Shop)" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <select id="jobSkillDropdown" name="skill_required" class="form-control" required style="flex: 1;">
+                            <option value="" disabled selected>Skill Required</option>
+                            <option>Agri Labor</option><option>Security</option>
+                            <option>Housekeeping</option><option>Labourer</option>
+                            <option>Cleaner/Maid</option><option>Peon/Helper</option>
+                            <option>Electrician</option><option>Carpenter</option>
+                            <option>Plumber</option>
+                        </select>
+                        <select name="location" class="form-control" required style="flex: 1;">
+                            <option value="" disabled selected>Job Location</option>
+                            <option>Latur</option><option>Chakur</option>
+                            <option>Udgir</option><option>Nilanga</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <input type="number" name="salary" placeholder="Monthly Salary (Rs)" class="form-control" required>
+                        <input type="number" name="experience_required" placeholder="Experience Required (Years)" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="description" placeholder="Job Description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="create-btn">Post Job</button>
+                </form>
+                <div class="status-box" id="jobStatusBox"></div>
+            </div>
+
+            <div class="section-card">
+                <div class="jobs-header">
+                    <h3 style="margin:0;">My Posted Jobs</h3>
+                    <button type="button" class="mini-btn" id="refreshMyJobs">Refresh</button>
+                </div>
+                <div id="myJobsList" class="jobs-list">
+                    <div class="job-card">No jobs posted yet.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.skill-card');
+        const dropdown = document.getElementById('skillDropdown');
+        const employerForm = document.getElementById('employerForm');
+        const statusBox = document.getElementById('statusBox');
+        const jobForm = document.getElementById('jobForm');
+        const jobStatusBox = document.getElementById('jobStatusBox');
+        const myJobsList = document.getElementById('myJobsList');
+        const refreshMyJobs = document.getElementById('refreshMyJobs');
+        const employerNameInput = employerForm.querySelector('input[name="full_name"]');
+        const employerEmailInput = employerForm.querySelector('input[name="email"]');
+        const employerPhoneInput = employerForm.querySelector('input[name="whatsapp_no"]');
+        const jobEmployerName = document.getElementById('jobEmployerName');
+        const jobEmployerEmail = document.getElementById('jobEmployerEmail');
+        const jobEmployerPhone = document.getElementById('jobEmployerPhone');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const selected = card.getAttribute('data-skill');
+                dropdown.value = selected;
+                cards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+
+        dropdown.addEventListener('change', () => {
+            cards.forEach(c => {
+                c.classList.remove('active');
+                if(c.getAttribute('data-skill') === dropdown.value) c.classList.add('active');
+            });
+        });
+
+function syncEmployerToJobForm() {
+            jobEmployerName.value = employerNameInput.value.trim();
+            jobEmployerEmail.value = employerEmailInput.value.trim();
+            jobEmployerPhone.value = employerPhoneInput.value.replace(/\D/g, '').trim();
+        }
+
+        employerNameInput.addEventListener('input', syncEmployerToJobForm);
+        employerEmailInput.addEventListener('input', syncEmployerToJobForm);
+        employerPhoneInput.addEventListener('input', syncEmployerToJobForm);
+
+        employerForm.addEventListener('submit', async event => {
+            event.preventDefault();
+
+            const formData = new FormData(employerForm);
+            const payload = Object.fromEntries(formData.entries());
+            payload.whatsapp_no = payload.whatsapp_no.replace(/\D/g, '').trim();
+
+            statusBox.textContent = 'Creating employer account...';
+
+            const response = await fetch('/api/employers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                statusBox.textContent = result.detail || 'Could not create employer account.';
+                return;
+            }
+
+            employerForm.reset();
+            cards.forEach(card => card.classList.remove('active'));
+            statusBox.textContent = result.message + ' You can now log in.';
+            syncEmployerToJobForm();
+        });
+
+        async function loadMyJobs() {
+            const email = jobEmployerEmail.value.trim();
+            if (!email) {
+                myJobsList.innerHTML = '<div class="job-card">Enter employer email to load posted jobs.</div>';
+                return;
+            }
+
+            const response = await fetch(`/api/jobs?employer_email=${encodeURIComponent(email)}`);
+            const jobs = await response.json();
+
+            if (!response.ok) {
+                myJobsList.innerHTML = '<div class="job-card">Could not load jobs now.</div>';
+                return;
+            }
+
+            if (!jobs.length) {
+                myJobsList.innerHTML = '<div class="job-card">No jobs posted yet.</div>';
+                return;
+            }
+
+            myJobsList.innerHTML = jobs.map(job => `
+                <div class="job-card">
+                    <h4>${job.job_title}</h4>
+                    <p class="job-meta"><strong>Skill:</strong> ${job.skill_required} | <strong>Location:</strong> ${job.location}</p>
+                    <p class="job-meta"><strong>Salary:</strong> Rs ${job.salary} | <strong>Experience:</strong> ${job.experience_required} years</p>
+                    <p class="job-meta">${job.description}</p>
+                </div>
+            `).join('');
+        }
+
+        refreshMyJobs.addEventListener('click', loadMyJobs);
+        jobEmployerEmail.addEventListener('change', loadMyJobs);
+
+        jobForm.addEventListener('submit', async event => {
+            event.preventDefault();
+
+            const formData = new FormData(jobForm);
+            const payload = Object.fromEntries(formData.entries());
+            payload.employer_phone = payload.employer_phone.replace(/\D/g, '').trim();
+            payload.salary = Number(payload.salary);
+            payload.experience_required = Number(payload.experience_required);
+
+            jobStatusBox.textContent = 'Posting job...';
+
+            const response = await fetch('/api/jobs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                jobStatusBox.textContent = result.detail || 'Could not post job.';
+                return;
+            }
+
+            jobStatusBox.textContent = result.message;
+            jobForm.reset();
+            syncEmployerToJobForm();
+            loadMyJobs();
+        });
+
+        syncEmployerToJobForm();
+        loadMyJobs();
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>

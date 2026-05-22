@@ -1,0 +1,363 @@
+best  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkLocal - Jobs</title>
+    <style>
+        :root {
+            --primary: #1a3a7a;
+            --bg: #eef3ff;
+            --card: #ffffff;
+            --text: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #dbe7ff 0%, #eef3ff 50%, #d8e3ff 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            background: rgba(26, 58, 122, 0.95);
+            color: #fff;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .back-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-weight: 700;
+            background: #fff;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 16px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        h2 {
+            margin: 0 0 14px;
+            color: var(--primary);
+        }
+
+        .grid2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .field {
+            margin-bottom: 10px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 14px;
+            outline: none;
+            background: #fff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #3b82f6;
+        }
+
+        .btn {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            padding: 13px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .sub-btn {
+            width: auto;
+            padding: 9px 12px;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--primary);
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .status {
+            min-height: 22px;
+            margin-top: 10px;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .list {
+            display: grid;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .item {
+            border: 1px solid #dbe3f1;
+            border-radius: 10px;
+            padding: 12px;
+            background: #f8faff;
+        }
+
+        .item h4 {
+            margin: 0 0 6px;
+            color: var(--primary);
+        }
+
+        .item p {
+            margin: 0 0 5px;
+            font-size: 13px;
+            color: #334155;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                grid-template-columns: 1fr;
+            }
+            .grid2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+            <button class="tab-btn active" onclick="showTab('posted')">My Posted Jobs</button>
+            <button class="tab-btn" onclick="showTab('browse')">Browse Jobs</button>
+            <button class="tab-btn" onclick="showTab('best')">Best Performer</button>
+        </div>
+        <button class="back-btn" onclick="goBack()">Back</button>
+    </div>
+
+    <div id="posted-tab" class="tab-content active">
+        <div class="page">
+            <section class="card">
+                <h2>Post & My Jobs</h2>
+            <form id="jobForm">
+                <div class="field"><input name="employer_name" id="employerName" placeholder="Employer Name" required></div>
+                <div class="grid2">
+                    <div class="field"><input type="email" name="employer_email" id="employerEmail" placeholder="Employer Email" required></div>
+                    <div class="field"><input type="tel" name="employer_phone" placeholder="Phone (10 digits)" minlength="10" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)" required></div>
+                </div>
+                <div class="field"><input name="job_title" placeholder="Job Title" required></div>
+                <div class="grid2">
+                    <div class="field">
+                        <select name="skill_required" required>
+                            <option value="" disabled selected>Skill Required</option>
+                            <option>Agri Labor</option><option>Security</option>
+                            <option>Housekeeping</option><option>Labourer</option>
+                            <option>Cleaner/Maid</option><option>Peon/Helper</option>
+                            <option>Electrician</option><option>Carpenter</option>
+                            <option>Plumber</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <select name="location" required>
+                            <option value="" disabled selected>Location</option>
+                            <option>Latur</option><option>Chakur</option>
+                            <option>Udgir</option><option>Nilanga</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid2">
+                    <div class="field"><input type="number" name="salary" placeholder="Salary (Rs)" required></div>
+                    <div class="field"><input type="number" name="experience_required" placeholder="Experience (Years)" required></div>
+                </div>
+                <div class="field"><textarea name="description" rows="3" placeholder="Job Description" required></textarea></div>
+                <button class="btn" type="submit">Post Job</button>
+                <div class="status" id="jobStatus"></div>
+            </form>
+
+            <div style="margin-top: 14px; display:flex; justify-content: space-between; align-items:center;">
+                <h2 style="margin:0; font-size:20px;">My Posted Jobs</h2>
+                <button class="sub-btn" id="loadMyJobs" type="button">Load</button>
+            </div>
+            <div class="list" id="myJobsList"><div class="item">No jobs loaded yet.</div></div>
+        </section>
+
+        </section>
+        </div>
+    </div>
+
+    <div id="browse-tab" class="tab-content">
+        <div class="page">
+            <section class="card">
+                <h2>Browse Jobs</h2>
+            <div class="grid2">
+                <div class="field">
+                    <select id="filterSkill">
+                        <option value="">All Skills</option>
+                        <option>Agri Labor</option><option>Security</option>
+                        <option>Housekeeping</option><option>Labourer</option>
+                        <option>Cleaner/Maid</option><option>Peon/Helper</option>
+                        <option>Electrician</option><option>Carpenter</option>
+                        <option>Plumber</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <select id="filterLocation">
+                        <option value="">All Locations</option>
+                        <option>Latur</option><option>Chakur</option>
+                        <option>Udgir</option><option>Nilanga</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn" id="loadJobsBtn" type="button">Load Available Jobs</button>
+            <div class="list" id="allJobsList"><div class="item">No jobs loaded yet.</div></div>
+        </section>
+    </div>
+
+    <script>
+        const jobForm = document.getElementById('jobForm');
+        const jobStatus = document.getElementById('jobStatus');
+        const myJobsList = document.getElementById('myJobsList');
+        const allJobsList = document.getElementById('allJobsList');
+        const loadMyJobsBtn = document.getElementById('loadMyJobs');
+        const loadJobsBtn = document.getElementById('loadJobsBtn');
+        const employerEmail = document.getElementById('employerEmail');
+        const employerName = document.getElementById('employerName');
+
+        function goBack() {
+            if (window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+            window.location.href = '/';
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
+        }
+
+function renderJobs(target, jobs) {
+            if (!jobs.length) {
+                target.innerHTML = '<div class="item">No jobs found.</div>';
+                return;
+            }
+            target.innerHTML = jobs.map(job => `
+                <div class="item">
+                    <h4>${escapeHtml(job.job_title)}</h4>
+                    <p><strong>Employer:</strong> ${escapeHtml(job.employer_name)} | <strong>Skill:</strong> ${escapeHtml(job.skill_required)}</p>
+                    <p><strong>Location:</strong> ${escapeHtml(job.location)} | <strong>Salary:</strong> Rs ${escapeHtml(job.salary)}</p>
+                    <p><strong>Experience:</strong> ${escapeHtml(job.experience_required)} years</p>
+                    <p><strong>Phone:</strong> <a href="https://wa.me/91${escapeHtml(job.employer_phone)}?text=Hi%2C%20I'm%20interested%20in%20your%20job%20posting%3A%20${encodeURIComponent(job.job_title)}" target="_blank">${escapeHtml(job.employer_phone)}</a></p>
+                    <p>${escapeHtml(job.description)}</p>
+                    <button class="btn" style="margin-top: 8px; font-size: 14px;" onclick="applyJob('${escapeHtml(job.id)}', '${escapeHtml(job.job_title)}')">Apply Job</button>
+                </div>
+            `).join('');
+        }
+
+        function applyJob(jobId, jobTitle) {
+            if (confirm(`Apply for job: ${jobTitle}?`)) {
+                alert('Application sent to employer via WhatsApp!');
+            }
+        }
+
+        async function loadMyJobs() {
+            const email = employerEmail.value.trim();
+            if (!email) {
+                myJobsList.innerHTML = '<div class="item">Enter employer email to load your jobs.</div>';
+                return;
+            }
+            const response = await fetch(`/api/jobs?employer_email=${encodeURIComponent(email)}`);
+            const jobs = await response.json();
+            if (!response.ok) {
+                myJobsList.innerHTML = '<div class="item">Could not load jobs.</div>';
+                return;
+            }
+            renderJobs(myJobsList, jobs);
+        }
+
+        async function loadAllJobs() {
+            const skill = document.getElementById('filterSkill').value;
+            const location = document.getElementById('filterLocation').value;
+            const params = new URLSearchParams();
+            if (skill) params.append('skill', skill);
+            if (location) params.append('location', location);
+            const url = params.toString() ? `/api/jobs?${params.toString()}` : '/api/jobs';
+            const response = await fetch(url);
+            const jobs = await response.json();
+            if (!response.ok) {
+                allJobsList.innerHTML = '<div class="item">Could not load jobs.</div>';
+                return;
+            }
+            renderJobs(allJobsList, jobs);
+        }
+
+        jobForm.addEventListener('submit', async event => {
+            event.preventDefault();
+            const formData = new FormData(jobForm);
+            const payload = Object.fromEntries(formData.entries());
+            payload.salary = Number(payload.salary);
+            payload.experience_required = Number(payload.experience_required);
+
+            jobStatus.textContent = 'Posting job...';
+            const response = await fetch('/api/jobs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                jobStatus.textContent = result.detail || 'Could not post job.';
+                return;
+            }
+
+            jobStatus.textContent = result.message;
+            const keptName = employerName.value;
+            const keptEmail = employerEmail.value;
+            jobForm.reset();
+            employerName.value = keptName;
+            employerEmail.value = keptEmail;
+            loadMyJobs();
+            loadAllJobs();
+        });
+
+        loadMyJobsBtn.addEventListener('click', loadMyJobs);
+        loadJobsBtn.addEventListener('click', loadAllJobs);
+
+        loadAllJobs();
+    </script>
+</body>
+</html>
